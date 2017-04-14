@@ -4,7 +4,7 @@ var recordSchema = new mongoose.Schema({
 	city: mongoose.Schema.Types.ObjectId,
 	date: Date,
 	data:[
-		{ aqi: Number, time: Date }
+		{ aqi: Number, time: Date , _id: false}
 	]
 });
 
