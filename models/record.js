@@ -11,7 +11,7 @@ var recordSchema = new mongoose.Schema({
 recordSchema.methods.avg = function(){
 	var avg = 0;
 	var readings = 0;
-	for (let i in this.data){
+	for (let i = 0; i < this.data.length; i++){
 		if (this.data[i].aqi != 0) {
 			avg = avg + this.data[i].aqi;
 			readings++;
