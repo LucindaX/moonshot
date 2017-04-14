@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "^4.15.2",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "mongoose": "^4.9.4",
     "request": "^2.81.0"
   }
