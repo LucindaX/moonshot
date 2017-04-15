@@ -22,7 +22,9 @@ recordSchema.methods.avg = function(){
 };
 
 recordSchema.statics.findForWeek = function(date, callback){
-  
+  var start_of_week = moment(date).startOf('week');
+  var end_of_week = moment(date).endOf('week');
+  return this.find({ date: {"$gte": start_of_week.toDate(), "$lte": end_of_week.toDate()} }, callback);  
 }
 
 recordSchema.statics.findForDay = function(date, callback){
