@@ -102,7 +102,7 @@ app.get('/api/feed/:city', function(req, res, next){
         var data = [];
 
         for (var i = 0; i < records.length; i++){
-          data.push({ date: records[i].date, data: records[i].data });
+          data.push({ date: records[i].date, aqi: records[i].avg() });
         }
 
         res.send({ date: date.format('YYYY-MM-DD'), utcOffset: city.tz, week: data });
