@@ -38,12 +38,13 @@ app.get('/',function(req, res, next){
 */
 app.get('/api/feed/:city', function(req, res, next){
   
-  var city = req.params.city;
+  var cityName = req.params.city;
   var date = req.query.date;
-  var type = req.query.type.toLowerCase();
+  var type = req.query.type;
 
   // check if data type is set
   if (type){
+    type = type.toLowerCase();
     if ( type != 'week' && type != 'day' )
       return res.status(400).send({ message: 'Type in invalid . set to either "week" or "day" '});
   }else{
@@ -51,12 +52,12 @@ app.get('/api/feed/:city', function(req, res, next){
     return res.status(400).send({ message: 'Data type not set . set type to "week" or "day" for data returned' });
   } 
 
-  City.findOne({ name: city.toLowerCase()}, function(err, city){
+  City.findOne({ name: cityName.toLowerCase()}, function(err, city){
     
     if (err) return next(err);
     
     if (!city){
-      return res.status(404).send({ message: 'Records for '+ city +' not found'});
+      return res.status(404).send({ message: 'Records for '+ cityName +' not found'});
     }
 
     // check if date is set
