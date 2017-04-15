@@ -11,7 +11,7 @@ mongoose.Promise = require('bluebird');
 const AQI_MAX = 160
 const AQI_MIN = 75
 
-function connect_to_db(callback){
+function connectToDb(callback){
   mongoose.connect(config.database);
   mongoose.connection.on('error', function(){
     console.log('Error: Could not connect to DB');
@@ -19,7 +19,7 @@ function connect_to_db(callback){
   callback();
 }
 
-function clean_db(callback){
+function cleanDb(callback){
   City.remove({}, function(err){
     console.log('City collection purged.');
     Record.remove({}, function(err){
@@ -30,7 +30,7 @@ function clean_db(callback){
   });
 }
 
-function seed_cities(callback){
+function seedCities(callback){
   var amsterdam = {
     name: 'amsterdam',
     tz: '+02:00',
@@ -47,7 +47,7 @@ function seed_cities(callback){
 }
 
 
-function seed_records(callback){
+function seedRecords(callback){
   
   City.find({}).exec(function(err, cities){
     
@@ -97,10 +97,10 @@ function seed_records(callback){
 
 function seed(){
   async.series([
-    connect_to_db,
-    clean_db,
-    seed_cities,
-    seed_records
+    connectToDb,
+    cleanDb,
+    seedCities,
+    seedRecords
   ], function(err, results){
     mongoose.disconnect();
     if (err) return console.log(err)
