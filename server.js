@@ -55,7 +55,8 @@ app.get('/api/day/:city', function(req, res, next){
         
         date = moment(date).utcOffset(city.tz).startOf('day');
       
-      }else
+      }
+      else{
         return res.status(400).send({ message: "invalid date format , follow yyyy-mm-dd" });
       }
     }
