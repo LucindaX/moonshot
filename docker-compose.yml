@@ -1,0 +1,15 @@
+version: "2"
+services:
+  mongo:
+    image: mongo
+  web:
+    image: lucindax/moonshot
+    command: bash -c "npm run seed && npm start"
+    depends_on:
+      - "mongo"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/code
+    environment:
+      - MONGO_URI=mongo/moonshot
