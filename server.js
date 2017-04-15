@@ -3,6 +3,8 @@ var express = require('express'),
     request = require('request'),
     moment = require('moment'),
     path = require('path'),
+    logger = require('morgan'),
+    bodyParser = require('body-parser'),
     config = require('./config');
 
 var City = require('./models/city'),
@@ -12,6 +14,10 @@ var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname,'public')));
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
 
 // connect to DB
 mongoose.Promise = require('bluebird');
@@ -32,8 +38,8 @@ app.get('/',function(req, res, next){
 */
 app.get('/api/day/:city', function(req, res, next){
   var city = req.params.city;
-  var date = req.params.date;
-
+  var date = req.query.date;
+ 
   City.findOne({ name: city.toLowerCase()}, function(err, city){
     
     if (err) return next(err);
@@ -42,9 +48,18 @@ app.get('/api/day/:city', function(req, res, next){
       return res.status(404).send({ message: 'Records for '+ city +' not found'});
     }
     // format date object for tz
+
     if (date){
-      date = moment(date).utcOffset(city.tz).startOf('day');
-    }else{
+
+      if (moment(date,'YYYY-MM-DD',true).isValid()){
+        
+        date = moment(date).utcOffset(city.tz).startOf('day');
+      
+      }else
+        return res.status(400).send({ message: "invalid date format , follow yyyy-mm-dd" });
+      }
+    }
+    else{
       date = moment(new Date()).utcOffset(city.tz).startOf('day');
     }
     
