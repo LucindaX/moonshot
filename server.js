@@ -64,8 +64,7 @@ app.get('/api/day/:city', function(req, res, next){
       date = moment(new Date()).utcOffset(city.tz).startOf('day');
     }
     
-    Record.findOne({ date: {"$gte": date.toDate(), "$lt": moment(date).add(1, 'days').toDate()}},
-      function(err, record){
+    Record.findForDay(date,function(err, record){
         
         if(err) return next(err);
     
@@ -79,10 +78,6 @@ app.get('/api/day/:city', function(req, res, next){
 
 });
 
-app.get('/api/week/:city', function(req, res, next){
-
-
-});
 
 app.use(function(err, req, res, next){
   console.log(err.stack);
