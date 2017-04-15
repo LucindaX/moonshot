@@ -36,10 +36,21 @@ app.get('/',function(req, res, next){
  * Looks up city data for specified
  * date or current date there
 */
-app.get('/api/day/:city', function(req, res, next){
+app.get('/api/feed/:city', function(req, res, next){
+  
   var city = req.params.city;
   var date = req.query.date;
- 
+  var type = req.query.type.toLowerCase();
+
+  // check if data type is set
+  if (type){
+    if ( type != 'week' && type != 'day' )
+      return res.status(400).send({ message: 'Type in invalid . set to either "week" or "day" '});
+  }else{
+    // if data type not set
+    return res.status(400).send({ message: 'Data type not set . set type to "week" or "day" for data returned' });
+  } 
+
   City.findOne({ name: city.toLowerCase()}, function(err, city){
     
     if (err) return next(err);
@@ -47,8 +58,8 @@ app.get('/api/day/:city', function(req, res, next){
     if (!city){
       return res.status(404).send({ message: 'Records for '+ city +' not found'});
     }
-    // format date object for tz
 
+    // check if date is set
     if (date){
 
       if (moment(date,'YYYY-MM-DD',true).isValid()){
@@ -57,23 +68,46 @@ app.get('/api/day/:city', function(req, res, next){
       
       }
       else{
-        return res.status(400).send({ message: "invalid date format , follow yyyy-mm-dd" });
+        // if date format is invalid
+        return res.status(400).send({ message: 'Invalid date format , follow yyyy-mm-dd' });
       }
     }
     else{
+      // set for current date in city 
+      // if none is set
       date = moment(new Date()).utcOffset(city.tz).startOf('day');
     }
-    
-    Record.findForDay(date,function(err, record){
+
+    // format date object for tz
+    if ( type == 'day'){
+
+      Record.findForDay(date, function(err, record){
         
-        if(err) return next(err);
+          if(err) return next(err);
     
-        if(!record){
-          return res.status(404).send({ message: "No records found", data:[] });
+          if(!record){
+            return res.status(404).send({ message: "No records found", data:[] });
+          }
+
+          res.send({date: date.format('YYYY-MM-DD'), utcOffset: city.tz, data: record.data });
+      });
+    }
+    else{
+
+      Record.findForWeek(date, function(err, records){
+        
+        if (err) return next(err);
+
+        var data = [];
+
+        for (var i = 0; i < records.length; i++){
+          data.push({ date: records[i].date, data: records[i].data });
         }
 
-        res.send({date: date.format('YYYY-MM-DD'), utcOffset: city.tz, data: record.data });
-    });
+        res.send({ date: date.format('YYYY-MM-DD'), utcOffset: city.tz, week: data });
+      });
+
+    }
   })
 
 });
