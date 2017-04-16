@@ -22,7 +22,7 @@ The server exposes the API as follows :
 ```
 `:city` : For whatever city data you're looking for , if city not in our current DB , a not found message relaying so will be sent back .
 
-`type=` : The type of data for plotting returned , whether it's for a day , or for an entire weel. So the following option work `type=day` or `type=week` .
+`type=` : The type of data for plotting returned , whether it's for a day , or for an entire week. So the following options work `type=day` or `type=week` .
 
 `date=` : The date for which the data will be searched for . In case of `type=day` will look for that date in the corresponding citys timezone and return corresponding data . In case of `type=week` return the data for the entire week that date falls in .
 
