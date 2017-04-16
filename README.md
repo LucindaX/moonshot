@@ -1,7 +1,7 @@
 # Moonshot
 Prototype for Moonshot AQI data exposure via API
 
-##Installation
+## Installation
 
 Easy setup with docker , step into current directory where docker-compose.yml is located. 
 Make sure you have docker-compose installed .
@@ -11,7 +11,7 @@ $ docker-compose up
 ```
 The server will be exposed on `localhost:3000`
 
-##Usage
+## Usage
 
 The DB will be filled with dummy data for Amsterdam for the current month you're running it in .
 
