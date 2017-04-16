@@ -18,7 +18,7 @@ recordSchema.methods.avg = function(){
       readings++;
     }
   }
-  return (readings != 0) ? Math.round((avg/readings)*100)/100 : 0
+  return (readings != 0) ? Math.floor(avg/readings) : 0
 };
 
 recordSchema.statics.findForWeek = function(date, callback){

@@ -72,7 +72,7 @@ function seedRecords(callback){
         for ( var j = 0; j < 24; j++ ){
           
           data.push({
-            aqi: Math.random() * (AQI_MAX - AQI_MIN) + AQI_MIN,
+            aqi: Math.round(Math.random() * (AQI_MAX - AQI_MIN) + AQI_MIN),
             time: moment(d).add(j,'hours').toDate()
           });
 
