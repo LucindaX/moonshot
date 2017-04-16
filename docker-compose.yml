@@ -4,7 +4,7 @@ services:
     image: mongo
   web:
     image: lucindax/moonshot
-    command: bash -c "npm run seed && npm start"
+    command: bash -c "./wait-for-it.sh mongo:27017 -- npm run seed && npm start"
     depends_on:
       - "mongo"
     ports:
